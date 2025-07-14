@@ -1,0 +1,732 @@
+{
+  "name": "AI Bookmark Assistant with Agent",
+  "description": "Advanced AI assistant for managing and analyzing Twitter bookmarks with full thread context and intelligent agent capabilities. This configuration automatically updates with the latest ngrok URL.",
+  "version": "2.1.0",
+  "x-ngrok-auto-update": true,
+  "schema": {
+    "openapi": "3.0.0",
+    "info": {
+      "title": "ChatGPT AI Bookmark Agent API",
+      "description": "Advanced AI agent for managing and analyzing Twitter bookmarks with thread awareness and intelligent insights. This API is served through an automatically managed ngrok tunnel for reliable access.",
+      "version": "2.1.0",
+      "contact": {
+        "name": "API Support",
+        "url": "https://github.com/yourusername/your-repo/issues"
+      },
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "servers": [
+      {
+        "url": "https://2d793bf40adc.ngrok-free.app",
+        "description": "AI Agent Server (URL auto-updated by ngrok manager)",
+        "x-ngrok-tunnel": true
+      },
+      {
+        "url": "http://localhost:3000",
+        "description": "Local development server (for direct testing only - not accessible to ChatGPT)",
+        "x-ngrok-tunnel": false
+      }
+    ],
+    "paths": {
+      "/api/search-bookmarks": {
+        "post": {
+          "summary": "Search bookmarks with AI-powered filtering",
+          "description": "Advanced bookmark search with quality filtering, thread awareness, and intelligent categorization",
+          "operationId": "searchBookmarks",
+          "requestBody": {
+            "required": false,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "search_query": {
+                      "type": "string",
+                      "description": "Text to search for in bookmark content, themes, or tags"
+                    },
+                    "quality_threshold": {
+                      "type": "number",
+                      "default": 0.0,
+                      "minimum": 0.0,
+                      "maximum": 1.0,
+                      "description": "Minimum quality score (0.0-1.0)"
+                    },
+                    "thread_only": {
+                      "type": "boolean",
+                      "default": false,
+                      "description": "Only return bookmarks that are part of threads"
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "default": 10,
+                      "minimum": 1,
+                      "maximum": 50,
+                      "description": "Maximum number of results to return"
+                    },
+                    "categories": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Filter by specific knowledge categories"
+                    },
+                    "author": {
+                      "type": "string",
+                      "description": "Filter by specific author/creator"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Search results with comprehensive bookmark data",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/SearchResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/analyze-bookmarks": {
+        "post": {
+          "summary": "Analyze bookmark collection patterns and insights",
+          "description": "Comprehensive analysis of bookmark quality, content patterns, categories, and learning opportunities",
+          "operationId": "analyzeBookmarks",
+          "requestBody": {
+            "required": false,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "analysis_type": {
+                      "type": "string",
+                      "enum": ["overview", "detailed"],
+                      "default": "overview",
+                      "description": "Type of analysis to perform"
+                    },
+                    "category": {
+                      "type": "string",
+                      "description": "Analyze bookmarks from specific category only"
+                    },
+                    "time_period": {
+                      "type": "string",
+                      "enum": ["7d", "30d", "90d", "1y"],
+                      "description": "Time range for analysis (7 days, 30 days, 90 days, 1 year)"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Comprehensive bookmark analysis with insights",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/AnalysisResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/get-recommendations": {
+        "post": {
+          "summary": "Get personalized bookmark recommendations",
+          "description": "AI-powered recommendations based on bookmark patterns, quality metrics, and user preferences",
+          "operationId": "getRecommendations",
+          "requestBody": {
+            "required": false,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "recommendation_type": {
+                      "type": "string",
+                      "enum": ["general", "high_quality", "learning_focused", "thread_discussions"],
+                      "default": "general",
+                      "description": "Type of recommendations to generate"
+                    },
+                    "user_interests": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Areas of interest to focus recommendations on"
+                    },
+                    "quality_focus": {
+                      "type": "number",
+                      "default": 0.7,
+                      "minimum": 0.0,
+                      "maximum": 1.0,
+                      "description": "Minimum quality threshold for recommendations"
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "default": 5,
+                      "minimum": 1,
+                      "maximum": 20,
+                      "description": "Number of recommendations to generate"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Personalized recommendations with reasoning",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/RecommendationResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/thread-analysis": {
+        "post": {
+          "summary": "Analyze threaded bookmark content",
+          "description": "Comprehensive analysis of thread quality, themes, coherence, and insights",
+          "operationId": "analyzeThreads",
+          "requestBody": {
+            "required": false,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "analysis_focus": {
+                      "type": "string",
+                      "enum": ["overview", "detailed"],
+                      "default": "overview",
+                      "description": "Depth of thread analysis"
+                    },
+                    "thread_id": {
+                      "type": "string",
+                      "description": "Analyze specific thread by ID"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Thread analysis with statistics and insights",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ThreadAnalysisResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/knowledge-query": {
+        "post": {
+          "summary": "Query knowledge base with AI assistance",
+          "description": "Ask questions about your bookmark collection with AI-powered contextual responses using your actual bookmark data",
+          "operationId": "queryKnowledge",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "query": {
+                      "type": "string",
+                      "description": "Your question about the bookmark collection or request for insights"
+                    },
+                    "context": {
+                      "type": "object",
+                      "description": "Additional context or parameters for the query"
+                    }
+                  },
+                  "required": ["query"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "AI-generated response with related bookmarks and context",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/KnowledgeResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/agent-status": {
+        "get": {
+          "summary": "Get AI agent status and statistics",
+          "description": "Retrieve current agent status, database statistics, usage metrics, and system health",
+          "operationId": "getAgentStatus",
+          "responses": {
+            "200": {
+              "description": "Agent status and comprehensive statistics",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/StatusResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/bookmark-insights": {
+        "post": {
+          "summary": "Generate bookmark insights and patterns",
+          "description": "Generate intelligent insights about bookmark patterns, learning opportunities, quality trends, and content analysis",
+          "operationId": "getBookmarkInsights",
+          "requestBody": {
+            "required": false,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "insight_type": {
+                      "type": "string",
+                      "enum": ["patterns", "learning", "quality"],
+                      "default": "patterns",
+                      "description": "Type of insights to generate"
+                    },
+                    "time_frame": {
+                      "type": "string",
+                      "enum": ["7d", "30d", "90d"],
+                      "default": "30d",
+                      "description": "Time frame for insight analysis"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Generated insights and actionable recommendations",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/InsightsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "SearchResponse": {
+          "type": "object",
+          "properties": {
+            "success": {
+              "type": "boolean",
+              "description": "Whether the search was successful"
+            },
+            "results": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/EnhancedBookmark"
+              },
+              "description": "Array of matching bookmarks"
+            },
+            "search_summary": {
+              "type": "object",
+              "description": "Summary of search results and filters applied"
+            },
+            "message": {
+              "type": "string",
+              "description": "Human-readable summary of results"
+            }
+          }
+        },
+        "AnalysisResponse": {
+          "type": "object",
+          "properties": {
+            "success": {
+              "type": "boolean"
+            },
+            "analysis_type": {
+              "type": "string"
+            },
+            "analysis": {
+              "type": "object",
+              "description": "Comprehensive analysis results including quality distribution, categories, and patterns"
+            },
+            "dataset_info": {
+              "type": "object",
+              "description": "Information about the analyzed dataset"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "RecommendationResponse": {
+          "type": "object",
+          "properties": {
+            "success": {
+              "type": "boolean"
+            },
+            "recommendation_type": {
+              "type": "string"
+            },
+            "recommendations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  },
+                  "bookmark": {
+                    "$ref": "#/components/schemas/EnhancedBookmark"
+                  },
+                  "reasoning": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "criteria": {
+              "type": "object",
+              "description": "Criteria used for generating recommendations"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "ThreadAnalysisResponse": {
+          "type": "object",
+          "properties": {
+            "success": {
+              "type": "boolean"
+            },
+            "analysis_focus": {
+              "type": "string"
+            },
+            "thread_analysis": {
+              "type": "object",
+              "description": "Comprehensive thread analysis including statistics, themes, and quality assessment"
+            },
+            "dataset_info": {
+              "type": "object",
+              "description": "Information about the analyzed thread dataset"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "KnowledgeResponse": {
+          "type": "object",
+          "properties": {
+            "success": {
+              "type": "boolean"
+            },
+            "query": {
+              "type": "string"
+            },
+            "answer": {
+              "type": "string",
+              "description": "AI-generated response based on bookmark context"
+            },
+            "related_bookmarks": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/EnhancedBookmark"
+              }
+            },
+            "knowledge_context": {
+              "type": "object",
+              "description": "Context about the knowledge base used for the response"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "StatusResponse": {
+          "type": "object",
+          "properties": {
+            "success": {
+              "type": "boolean"
+            },
+            "agent_status": {
+              "type": "object",
+              "description": "Current agent operational status and capabilities"
+            },
+            "database_stats": {
+              "type": "object",
+              "description": "Statistics about the bookmark database"
+            },
+            "usage_stats": {
+              "type": "object",
+              "description": "Usage statistics and performance metrics"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "InsightsResponse": {
+          "type": "object",
+          "properties": {
+            "success": {
+              "type": "boolean"
+            },
+            "insight_type": {
+              "type": "string"
+            },
+            "time_frame": {
+              "type": "string"
+            },
+            "insights": {
+              "type": "object",
+              "description": "Generated insights and patterns"
+            },
+            "data_summary": {
+              "type": "object",
+              "description": "Summary of data analyzed for insights"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "EnhancedBookmark": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique bookmark identifier"
+            },
+            "content": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "description": "Bookmark text content"
+                },
+                "author": {
+                  "type": "string",
+                  "description": "Content author/creator"
+                },
+                "url": {
+                  "type": "string",
+                  "description": "Original URL"
+                },
+                "created_at": {
+                  "type": "string",
+                  "description": "Content creation timestamp"
+                }
+              }
+            },
+            "quality_metrics": {
+              "type": "object",
+              "properties": {
+                "quality_score": {
+                  "type": "number",
+                  "description": "AI-assessed quality score (0-1)"
+                },
+                "learning_value": {
+                  "type": "number",
+                  "description": "Educational value score (0-1)"
+                },
+                "relevance_score": {
+                  "type": "number",
+                  "description": "Relevance score (0-1)"
+                },
+                "composite_score": {
+                  "type": "number",
+                  "description": "Overall composite score (0-1)"
+                }
+              }
+            },
+            "categorization": {
+              "type": "object",
+              "properties": {
+                "knowledge_category": {
+                  "type": "string",
+                  "description": "Primary knowledge category"
+                },
+                "categories": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "All applicable categories"
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Content tags"
+                },
+                "sentiment": {
+                  "type": "string",
+                  "description": "Content sentiment analysis"
+                }
+              }
+            },
+            "analysis": {
+              "type": "object",
+              "properties": {
+                "key_insights": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Key insights extracted from content"
+                },
+                "actionable": {
+                  "type": "boolean",
+                  "description": "Whether content contains actionable information"
+                },
+                "reference_worthy": {
+                  "type": "boolean",
+                  "description": "Whether content is suitable for reference"
+                },
+                "discussion_worthy": {
+                  "type": "boolean",
+                  "description": "Whether content is good for discussion"
+                }
+              }
+            },
+            "thread_info": {
+              "type": "object",
+              "properties": {
+                "is_thread": {
+                  "type": "boolean",
+                  "description": "Whether this bookmark is part of a thread"
+                },
+                "thread_id": {
+                  "type": "string",
+                  "description": "Thread identifier (if applicable)"
+                },
+                "thread_position": {
+                  "type": "integer",
+                  "description": "Position within thread (if applicable)"
+                },
+                "thread_theme": {
+                  "type": "string",
+                  "description": "Overall thread theme (if applicable)"
+                },
+                "thread_summary": {
+                  "type": "string",
+                  "description": "Thread summary (if applicable)"
+                },
+                "thread_coherence": {
+                  "type": "number",
+                  "description": "Thread coherence score (if applicable)"
+                },
+                "key_thread_insights": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Key insights from entire thread (if applicable)"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "authentication": {
+    "type": "none",
+    "note": "Running on localhost - no authentication required for development"
+  },
+  "instructions": {
+    "setup": [
+      "1. Start the AI Agent Server with: npm run chatgpt:server",
+      "2. Install and set up ngrok: follow ngrok-setup-guide.md",
+      "3. Create ngrok tunnel: ngrok http 3001",
+      "4. Copy your ngrok HTTPS URL (e.g., https://abc123.ngrok.io)",
+      "5. Replace 'YOUR_NGROK_URL' in the servers section with your actual ngrok URL",
+      "6. Create a new Custom GPT in ChatGPT",
+      "7. Use title: 'AI Bookmark Assistant with Agent'",
+      "8. Copy this updated OpenAPI schema into Actions",
+      "9. Test with intelligent bookmark queries"
+    ],
+    "url_configuration": [
+      "  IMPORTANT: ChatGPT Actions cannot access localhost:3001 directly",
+      " Use ngrok to create a public tunnel: ngrok http 3001",
+      " Update the servers URL with your ngrok HTTPS URL",
+      " Example: Replace 'YOUR_NGROK_URL' with 'abc123' if your tunnel is https://abc123.ngrok.io",
+      " Test the tunnel by visiting https://your-ngrok-url.ngrok.io/health"
+    ],
+    "enhanced_features": [
+      " AI-powered search and analysis",
+      " Advanced thread context understanding",
+      " Intelligent quality assessment and scoring",
+      " Personalized recommendations and insights",
+      " Natural language knowledge queries",
+      " Pattern analysis and learning opportunities",
+      " Context-aware responses optimized for ChatGPT"
+    ],
+    "usage_examples": [
+      "Search for my highest quality bookmarks about AI development",
+      "Analyze my bookmark collection patterns from the last 30 days",
+      "Give me learning-focused recommendations in machine learning",
+      "What are the best threaded discussions I've bookmarked?",
+      "Analyze the quality distribution of my bookmarks",
+      "What learning opportunities exist in my bookmark collection?",
+      "Generate insights about my bookmark patterns and themes",
+      "Find bookmarks that would be good for reference material"
+    ],
+    "intelligent_queries": [
+      "What topics am I most interested in based on my bookmarks?",
+      "Which authors provide the highest quality content in my collection?",
+      "What are the emerging themes in my recent bookmarks?",
+      "How has my learning focus changed over time?",
+      "What knowledge gaps exist in my bookmark collection?",
+      "Which threaded discussions have the best insights?",
+      "What content should I prioritize reading next?",
+      "How can I improve the quality of my bookmark collection?"
+    ],
+    "agent_advantages": [
+      " Intelligent responses tailored to your specific bookmark collection",
+      " Context-aware analysis using your actual data patterns",
+      " Personalized recommendations based on your interests",
+      " Advanced search capabilities beyond simple keyword matching",
+      " Comprehensive analytics and insights about your knowledge base",
+      " Deep thread understanding and coherence analysis",
+      " AI-powered natural language processing of your content",
+      " Learning path suggestions and knowledge gap identification"
+    ]
+  }
+}
